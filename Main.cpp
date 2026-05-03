@@ -23,7 +23,12 @@ int main() {
     Level currentLevel;
     loadLevel(currentLevel, 0);
     Player players[MAX_PLAYERS];
-    playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
+
+    for (int i = 0; i < MAX_PLAYERS; i++) {
+        playerInit(players[i], i, currentLevel);
+    }
+
+     // playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
     sf::Clock clock;
 
     while (window.isOpen()) {
@@ -89,7 +94,7 @@ int main() {
         window.clear(sf::Color::Black);
         if (currentState == MENU) drawMainMenu(window, menuSelection);
         else {
-            drawBackground(window); drawLevel(window, currentLevel);
+            drawBackground(window);drawLevel(window, currentLevel, 0);
             drawPlayer(window, players[0], 0, dt); drawPlayer(window, players[1], 1, dt);
             window.setView(window.getDefaultView());
             drawHealthBars(window, players, p1Wins, p2Wins);

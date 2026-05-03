@@ -44,15 +44,6 @@ void drawHealthBars(sf::RenderWindow& window, Player players[], int p1Wins, int 
     loadAssets();
 
     for (int i = 0; i < MAX_PLAYERS; i++) {
-        float ratio = (float)players[i].health / players[i].maxHealth;
-        if (players[i].isAlive && ratio < 0.3f) {
-            sf::RectangleShape danger({ 1600.f, 900.f });
-            danger.setFillColor(sf::Color(139, 0, 0, 40));
-            window.draw(danger);
-        }
-    }
-
-    for (int i = 0; i < MAX_PLAYERS; i++) {
         float xPos = (i == 0) ? 50.f : (1600.f - BAR_WIDTH - 50.f);
         int hp = players[i].isAlive ? players[i].health : 0;
         sf::RectangleShape bgBar({BAR_WIDTH, BAR_HEIGHT});
@@ -124,10 +115,27 @@ void drawWinScreen(sf::RenderWindow& window, int winnerIndex, int p1Wins, int p2
 
 void drawMainMenu(sf::RenderWindow& window, int selectedItem) {
     loadAssets();
-    sf::RectangleShape bg({1600.f, 900.f});
-    bg.setFillColor(sf::Color::Black);
-    window.draw(bg);
-    static sf::Texture logoTexture;
+    static sf::Texture menuBackgroundTexture;
+    static bool menuBackgroundLoaded = false;
+
+    if (!menuBackgroundLoaded) {
+        menuBackgroundLoaded = menuBackgroundTexture.loadFromFile("assets/ui2.png");
+    }
+
+    if (menuBackgroundLoaded) {
+        sf::Sprite menuBackground(menuBackgroundTexture);
+        auto size = menuBackgroundTexture.getSize();
+        if (size.x > 0 && size.y > 0) {
+            menuBackground.setScale({1600.f / size.x, 900.f / size.y});
+        }
+        window.draw(menuBackground);
+    } else {
+        sf::RectangleShape bg({1600.f, 900.f});
+        bg.setFillColor(sf::Color::Black);
+        window.draw(bg);
+    }
+
+    /*static sf::Texture logoTexture;
     static bool logoLoaded = logoTexture.loadFromFile("assets/logo.png");
     if (logoLoaded) {
         sf::Sprite logo(logoTexture);
@@ -136,7 +144,7 @@ void drawMainMenu(sf::RenderWindow& window, int selectedItem) {
         logo.setPosition({800.f, 350.f});
         logo.setScale({700.f/size.x, 700.f/size.x});
         window.draw(logo);
-    }
+    } */
     sf::Text t1(g_font, "PLAY", 50); t1.setFillColor(selectedItem == 0 ? sf::Color::Yellow : sf::Color::White);
     t1.setOrigin({t1.getLocalBounds().size.x/2.f, 0}); t1.setPosition({800.f, 650.f}); window.draw(t1);
     sf::Text t2(g_font, "QUIT", 50); t2.setFillColor(selectedItem == 1 ? sf::Color::Yellow : sf::Color::White);
@@ -164,8 +172,34 @@ void drawPauseScreen(sf::RenderWindow& window, int pauseSelection) {
     m.setOrigin({m.getLocalBounds().size.x/2.f, 0}); m.setPosition({800.f, 550.f}); window.draw(m);
 }
 
+
 void drawCountdown(sf::RenderWindow& window, int count) {
+
     loadAssets();
+
+    static bool countsoundLoaded = false;
+    static sf::SoundBuffer countdownBuffer;
+    static sf::Sound countdownSound(countdownBuffer);
+
+    if (!countsoundLoaded) {
+        if (countdownBuffer.loadFromFile("assets/countdown.wav")) {
+            countdownSound.setBuffer(countdownBuffer);
+            countsoundLoaded = true;
+        }
+    }
+
+     static bool played = false;
+
+    if (count == 3 && !played) { 
+        countdownSound.stop();   
+        countdownSound.play();
+        played = true;
+    } 
+
+    if (count != 3) {
+        played = false;
+    }
+
     std::string txt = (count == 3) ? "3" : (count == 2) ? "2" : (count == 1) ? "1" : "FIGHT!";
     sf::Text t(g_font, txt, (count == 0) ? 90 : 120);
     t.setFillColor((count == 0) ? sf::Color::Red : sf::Color::White);
