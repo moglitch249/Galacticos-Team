@@ -23,7 +23,12 @@ int main() {
     Level currentLevel;
     loadLevel(currentLevel, 0);
     Player players[MAX_PLAYERS];
-    playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
+
+    for (int i = 0; i < MAX_PLAYERS; i++) {
+        playerInit(players[i], i, currentLevel);
+    }
+
+     // playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
     sf::Clock clock;
 
     while (window.isOpen()) {
