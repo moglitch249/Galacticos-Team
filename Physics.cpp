@@ -92,3 +92,55 @@ void handleCombat(Player& attacker, Player& defender) {
     defender.velocity.y = KNOCKBACK_Y;
     defender.onGround   = false;
 }
+
+
+void resolvePlatformCollision(Player& p, const Platform& plat){
+    //palyer
+    float left = p.pos.x;
+    float right = p.pos.x + p.width;
+    float top = p.pos.y;
+    float bottom = p.pos.y + p.height;
+    
+    //platform
+    float platleft = plat.position.x;
+    float platright = plat.position.x + plat.size.x;
+    float platTop = plat.position.y;
+    float platbot = plat.position.y + plat.size.y;
+
+
+    //not overlapping
+    if (right <= platleft || left >= platright || top >= platTop || bottom <= platbot)
+    {
+        return;
+    }
+    //overlapping
+    float overlapX = std::min(right, platright) - std::max(left, platleft);
+    float overlapY = std::min(bottom, platbot) - std::max(top, platTop);
+    if (overlapX<overlapY)
+    {
+        if (left < platleft)
+        {
+            p.pos.x -= overlapX;
+        }
+        else{
+            p.pos.x += overlapX;
+        }
+    
+    }
+    else{
+        if (top > platTop)
+        {
+            p.pos.y -= overlapY;
+            p.velocity.y = 0;
+            p.onGround = true;
+        }
+        else{
+            p.pos.y += overlapY;
+        }
+    }
+
+
+
+
+
+}
