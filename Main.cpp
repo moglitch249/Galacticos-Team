@@ -28,7 +28,6 @@ int main() {
         playerInit(players[i], i, currentLevel);
     }
 
-     // playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
     sf::Clock clock;
 
     while (window.isOpen()) {
@@ -42,8 +41,8 @@ int main() {
                     if (keyPressed->code == sf::Keyboard::Key::Enter) {
                         if (menuSelection == 0) {
                             currentRound = 1; p1Wins = 0; p2Wins = 0;
-                            playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
-                            players[0].pos.x = 300.f; players[1].pos.x = 1300.f;
+                            // playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
+                            // players[0].pos.x = 300.f; players[1].pos.x = 1300.f;
                             currentState = ROUND_START;
                         } else window.close();
                     }
@@ -64,13 +63,16 @@ int main() {
 
         int levelId = (currentRound == 2) ? 1 : 0;
         if (currentState == ROUND_START) {
-            roundTimer -= dt; if (roundTimer <= 0.f) { roundTimer = 2.0f; countdownTimer = 3.9f; currentState = COUNTDOWN; }
+            roundTimer -= dt;
+             if (roundTimer <= 0.f) { roundTimer = 2.0f; countdownTimer = 3.9f; currentState = COUNTDOWN; }
         } else if (currentState == COUNTDOWN) {
             countdownTimer -= dt; if (countdownTimer <= 0.f) currentState = PLAYING;
         } else if (currentState == PLAYING) {
-            playerReadInputForIndex(players[0], 0); playerReadInputForIndex(players[1], 1);
-            playerUpdate(players[0], dt); playerUpdate(players[1], dt);
-            physicsUpdate(players[0], dt, levelId); physicsUpdate(players[1], dt,levelId);
+            for(int i = 0; i < MAX_PLAYERS; i++){
+                playerReadInputForIndex(players[i], i);
+                playerUpdate(players[i], dt);
+                physicsUpdate(players[i], dt, levelId);
+            }
             for (int i = 0; i < currentLevel.platformCount; i++)
             {
                 resolvePlatformCollision(players[0], currentLevel.platforms[i]);
@@ -91,6 +93,8 @@ int main() {
                     currentState = GAME_OVER;
                 } else {
                     currentRound++;
+                    int newLevelId = (currentRound == 2) ? 1 : 0;
+                    loadLevel(currentLevel, newLevelId);
                     playerInit(players[0], 0, currentLevel); 
                     playerInit(players[1], 1, currentLevel);
                     players[0].pos.x = 300.f; 

@@ -270,15 +270,24 @@ void drawLevel(RenderWindow& window, Level& level) {
 }
 
 void drawLevel(sf::RenderWindow& window, const Level& level, int levelId) {
-    static sf::Texture platformTexture1;
-    static sf::Texture platformTexture2;
-    static bool texLoaded1 = platformTexture1.loadFromFile("assets/platform.png");
-    static bool texLoaded2 = platformTexture2.loadFromFile("assets/LavaW_StonePlatform1.png");
 
-    bool isLevel2 = (levelId == 1);
-    sf::Texture& currentTexture = isLevel2 ? platformTexture2 : platformTexture1;
-    bool texLoaded = isLevel2 ? texLoaded2 : texLoaded1;
+    const int MAX_TEXTURES = 4;
+    static sf::Texture textures[MAX_TEXTURES];
+    static bool texLoaded[MAX_TEXTURES] = {false};
+    static bool initialized = false;
+
+    if (!initialized) {
+        texLoaded[0] = textures[0].loadFromFile("assets/platform.png");
+        texLoaded[1] = textures[1].loadFromFile("assets/LavaW_StonePlatform1.png");
+        texLoaded[2] = textures[2].loadFromFile("assets/Floor_texture.png");
+        texLoaded[3] = textures[3].loadFromFile("assets/wall_texture.png");
+        initialized = true;
+    }
+
     for (int i = 0; i < level.platformCount; i++) {
+
+        int tid = level.platforms[i].textureId;  // ← هنا بياخد الـ id بتاع الـ platform دي
+
         sf::RectangleShape rect(sf::Vector2f(
             level.platforms[i].size.x,
             level.platforms[i].size.y
@@ -287,14 +296,19 @@ void drawLevel(sf::RenderWindow& window, const Level& level, int levelId) {
             level.platforms[i].position.x,
             level.platforms[i].position.y
         ));
-       if (texLoaded) {
-    sf::Sprite platformSprite(currentTexture);
-    platformSprite.setPosition(sf::Vector2f(level.platforms[i].position.x, level.platforms[i].position.y));
-    platformSprite.setScale(sf::Vector2f(level.platforms[i].size.x / currentTexture.getSize().x, level.platforms[i].size.y / currentTexture.getSize().y));
-    window.draw(platformSprite);
-} else {
-    rect.setFillColor(level.platforms[i].color);
-    window.draw(rect);
-}
+
+        // تأكد إن الـ id صح وإن الصورة اتحملت
+        if (tid >= 0 && tid < MAX_TEXTURES && texLoaded[tid]) {
+            sf::Sprite platformSprite(textures[tid]);
+            platformSprite.setPosition(rect.getPosition());
+            platformSprite.setScale(sf::Vector2f(
+                level.platforms[i].size.x / textures[tid].getSize().x,
+                level.platforms[i].size.y / textures[tid].getSize().y
+            ));
+            window.draw(platformSprite);
+        } else {
+            rect.setFillColor(level.platforms[i].color);
+            window.draw(rect);
+        }
     }
 }

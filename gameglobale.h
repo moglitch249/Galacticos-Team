@@ -22,7 +22,8 @@ using namespace sf;
      Vec2 size;
      sf::Color color;
      sf::FloatRect rect;
-    };
+     int textureId;
+  };
     
     const int MAX_PLATFORMS = 64;
     const int MAX_PLAYERS = 2;
