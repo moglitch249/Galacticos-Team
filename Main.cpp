@@ -13,6 +13,7 @@ std::vector<Level> levels;
 enum GameState { MENU, ROUND_START, COUNTDOWN, PLAYING, GAME_OVER, PAUSED };
 
 int main() {
+
     sf::RenderWindow window(sf::VideoMode({(unsigned int)WINDOW_WIDTH, (unsigned int)WINDOW_HEIGHT}), "STICK FIGHT");
     window.setFramerateLimit(60);
 
@@ -41,8 +42,10 @@ int main() {
                     if (keyPressed->code == sf::Keyboard::Key::Enter) {
                         if (menuSelection == 0) {
                             currentRound = 1; p1Wins = 0; p2Wins = 0;
-                            // playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
-                            // players[0].pos.x = 300.f; players[1].pos.x = 1300.f;
+                            
+                           loadLevel(currentLevel, 0);
+                           playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
+                           players[0].pos.x = 300.f; players[1].pos.x = 1300.f;
                             currentState = ROUND_START;
                         } else window.close();
                     }
@@ -100,6 +103,9 @@ int main() {
                     players[0].pos.x = 300.f; 
                     players[1].pos.x = 1300.f;
                     roundTimer = 2.0f; 
+                    winnerIndex = -1;
+                    countdownTimer = 3.9f;
+
                     currentState = ROUND_START;
                 }
             }
