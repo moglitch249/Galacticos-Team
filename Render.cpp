@@ -12,7 +12,7 @@ constexpr float FRAME_HEIGHT = 96.f;
 constexpr float SPRITE_SCALE = 3.0f;
 constexpr float SPRITE_CENTER_X = FRAME_WIDTH * 0.5f;
 constexpr float SPRITE_FEET_Y = FRAME_HEIGHT;
-constexpr float FEET_OFFSET_Y = 116.f;
+constexpr float FEET_OFFSET_Y = 45.f;
 }
 
 static void drawStickFigure(RenderWindow& window, Player& p, int playerIndex) {
@@ -91,7 +91,7 @@ void drawArrow(sf::RenderWindow& window, const Player& p, int playerIndex)
     arrow.setOutlineThickness(2.f);
 
     float centerX = p.pos.x + p.width * 0.5f;
-    float topY    = p.pos.y - 35.f + offsetY;
+    float topY    = p.pos.y - 60.f + offsetY;
 
     arrow.setPosition(sf::Vector2f(centerX - 10.f, topY));
 
@@ -229,13 +229,17 @@ void drawPlayer(RenderWindow& window, Player& p, int playerIndex, float dt) {
 }
 
 
-void drawBackground(RenderWindow& window) {
-    static Texture backgroundTexture;
-  static bool textureLoaded = backgroundTexture.loadFromFile("assets/hero.png");
-
+void drawBackground(RenderWindow& window, int levelId) {
+    static Texture backgroundTexture1;
+    static Texture backgroundTexture2;
+  static bool textureLoaded1 = backgroundTexture1.loadFromFile("assets/hero.png");
+  static bool textureLoaded2 = backgroundTexture2.loadFromFile("assets/level2.png");
+    bool isLevel2 = (levelId==1);
+    Texture* currentTexture = isLevel2 ? &backgroundTexture2 : &backgroundTexture1;
+    bool textureLoaded = isLevel2 ? textureLoaded2 : textureLoaded1;
     if (textureLoaded) {
-        Sprite background(backgroundTexture);
-        const Vector2u textureSize = backgroundTexture.getSize();
+        Sprite background(*currentTexture);
+        const Vector2u textureSize = currentTexture->getSize();
         if (textureSize.x > 0 && textureSize.y > 0) {
             background.setScale(Vector2f(
                 static_cast<float>(WINDOW_WIDTH) / static_cast<float>(textureSize.x),

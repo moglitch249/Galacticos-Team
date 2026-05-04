@@ -1,4 +1,4 @@
-#include "Ui.h"
+#include "UI.h"
 #include "gameglobale.h"
 #include <string>
 #include <SFML/Audio.hpp>

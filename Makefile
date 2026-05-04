@@ -1,11 +1,11 @@
-SFML_PATH = C:/msys64/mingw64
+SFML_PATH = /home/ali/SFML
 CXX = g++
 
-CXXFLAGS = -I$(SFML_PATH)/include -std=c++17 -O3
-LDFLAGS = -L$(SFML_PATH)/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lopengl32 -lfreetype
+CXXFLAGS = -I$(SFML_PATH)/include -I$(SFML_PATH)/build/include -std=c++17 -O3
+LDFLAGS = -L$(SFML_PATH)/build/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -Wl,-rpath,$(SFML_PATH)/build/lib
 
-OBJECTS = Main.o Player.o Level.o Physics.o Render.o Ui.o
-TARGET = Main.exe
+OBJECTS = Main.o Player.o Level.o Physics.o Render.o Ui.o libudev.o
+TARGET = Main
 
 all: $(TARGET)
 
@@ -15,7 +15,10 @@ $(TARGET): $(OBJECTS)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+libudev.o:
+	g++ -c -I$(SFML_PATH)/include $(SFML_PATH)/include/libudev.c -o libudev.o
+
 clean:
-	del /Q *.o $(TARGET)
+	rm -f *.o $(TARGET)
 
 .PHONY: all clean

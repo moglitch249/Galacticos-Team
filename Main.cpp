@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "Physics.h"
 #include "Render.h"
-#include "Ui.h"
+#include "UI.h"
 
 int score = 0;
 std::vector<Level> levels;
@@ -62,6 +62,7 @@ int main() {
             }
         }
 
+        int levelId = (currentRound == 2) ? 1 : 0;
         if (currentState == ROUND_START) {
             roundTimer -= dt; if (roundTimer <= 0.f) { roundTimer = 2.0f; countdownTimer = 3.9f; currentState = COUNTDOWN; }
         } else if (currentState == COUNTDOWN) {
@@ -69,7 +70,16 @@ int main() {
         } else if (currentState == PLAYING) {
             playerReadInputForIndex(players[0], 0); playerReadInputForIndex(players[1], 1);
             playerUpdate(players[0], dt); playerUpdate(players[1], dt);
-            physicsUpdate(players[0], dt); physicsUpdate(players[1], dt);
+            physicsUpdate(players[0], dt, levelId); physicsUpdate(players[1], dt,levelId);
+            for (int i = 0; i < currentLevel.platformCount; i++)
+            {
+                resolvePlatformCollision(players[0], currentLevel.platforms[i]);
+            }
+            for (int i = 0; i < currentLevel.platformCount; i++)
+            {
+                resolvePlatformCollision(players[1], currentLevel.platforms[i]);
+            }
+            
             resolvePlayerCollision(players[0], players[1]);
             handleCombat(players[0], players[1]); handleCombat(players[1], players[0]);
 
@@ -94,7 +104,8 @@ int main() {
         window.clear(sf::Color::Black);
         if (currentState == MENU) drawMainMenu(window, menuSelection);
         else {
-            drawBackground(window);drawLevel(window, currentLevel, 0);
+            int levelId = (currentRound == 2) ? 1 : 0;
+            drawBackground(window,levelId);drawLevel(window, currentLevel, levelId);
             drawPlayer(window, players[0], 0, dt); drawPlayer(window, players[1], 1, dt);
             window.setView(window.getDefaultView());
             drawHealthBars(window, players, p1Wins, p2Wins);

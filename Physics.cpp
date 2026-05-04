@@ -10,7 +10,8 @@ const float KNOCKBACK_Y = -250.f;
 const int   ATTACK_DMG  = 10;
 }
 
-void physicsUpdate(Player& p, float dt) {
+void physicsUpdate(Player& p, float dt, int levelId) {
+    p.onGround = false;
     if (!p.isAlive) return;
 
     p.velocity.y += GRAVITY * dt;
@@ -18,12 +19,12 @@ void physicsUpdate(Player& p, float dt) {
     p.pos.x += p.velocity.x * dt;
     p.pos.y += p.velocity.y * dt;
 
-    if (p.pos.y + p.height >= 720.f) {
-        p.pos.y      = 720.f - p.height;
+    float floorY = (levelId==1) ? 690.f : 790.f;
+
+    if (p.pos.y + p.height >= floorY ) {
+        p.pos.y      = floorY - p.height;
         p.velocity.y = 0.f;
         p.onGround   = true;
-    } else {
-        p.onGround = false;
     }
 
     if (p.pos.x < 0.f)                   p.pos.x = 0.f;
@@ -109,7 +110,7 @@ void resolvePlatformCollision(Player& p, const Platform& plat){
 
 
     //not overlapping
-    if (right <= platleft || left >= platright || top >= platTop || bottom <= platbot)
+    if (right <= platleft || left >= platright || top >= platbot || bottom <= platTop)
     {
         return;
     }
@@ -128,7 +129,7 @@ void resolvePlatformCollision(Player& p, const Platform& plat){
     
     }
     else{
-        if (top > platTop)
+        if (top < platTop)
         {
             p.pos.y -= overlapY;
             p.velocity.y = 0;

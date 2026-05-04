@@ -17,9 +17,9 @@ void loadLevel(Level& level, int levelId) {
     sf::Color mid    = sf::Color(100, 110, 130);
 
     if (levelId == 0) {
-        addPlatform(level, 470,  550, 600, 35,  mid);    // center
-        addPlatform(level, 150,  650, 200, 35,  mid);    // left mid
-        addPlatform(level, 1200,  650, 200, 35,  mid);    // right mid
+        addPlatform(level, 470,  480, 600, 35,  mid);    // center
+        addPlatform(level, 150,  580, 200, 35,  mid);    // left mid
+        addPlatform(level, 1200,  580, 200, 35,  mid);    // right mid
 
 
         // Set Spawn points for each player
@@ -32,7 +32,7 @@ void loadLevel(Level& level, int levelId) {
 
 
     if (levelId == 1) {
-        addPlatform(level, 0,    790, 1920, 40, groundColor); // floor
+        addPlatform(level, 0,    690, 1920, 40, groundColor); // floor
         addPlatform(level, 0,  0, 50, 790,  mid);    // left wall
         addPlatform(level, 1550,  0, 50, 790,  mid);    // right wall
 
