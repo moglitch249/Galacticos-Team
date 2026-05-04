@@ -29,12 +29,12 @@ void loadLevel(Level& level, int levelId) {
     
     // Level two
     if (levelId == 1) {
-        addPlatform(level, 0, 760, 1920, 40, groundColor,2); // floor
+        addPlatform(level, 0, 680, 1920, 55, groundColor,2); // floor
         addPlatform(level, 470, 380, 600, 35,  mid, 1);    // center platform
         addPlatform(level, 150, 480, 200, 35,  mid, 1);    // left platform
         addPlatform(level, 1200, 480, 200, 35,  mid, 1);    // right platform
-        addPlatform(level, 0, 0, 60, 760,mid, 3); // left wall
-        addPlatform(level, 1860, 0, 60, 760, mid, 3); // right wall
+        addPlatform(level, 3, 20, 70, 660,mid, 3); // left wall
+        addPlatform(level, 1512, 20, 70, 660, mid, 3); // right wall
         
     }
     
