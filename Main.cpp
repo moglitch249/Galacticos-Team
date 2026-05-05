@@ -15,6 +15,12 @@ enum GameState { MENU, ROUND_START, COUNTDOWN, PLAYING, GAME_OVER, PAUSED };
 int main() {
 
     sf::RenderWindow window(sf::VideoMode({(unsigned int)WINDOW_WIDTH, (unsigned int)WINDOW_HEIGHT}), "STICK FIGHT");
+
+    sf::Image icon;
+if (icon.loadFromFile("assets/icon.png")) {
+    window.setIcon(icon);
+}
+
     window.setFramerateLimit(60);
 
     GameState currentState = MENU;
