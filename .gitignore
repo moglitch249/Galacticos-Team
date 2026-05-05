@@ -3,7 +3,6 @@
 .idea/
 
 # C++
-*.exe
 *.out
 *.o
 
