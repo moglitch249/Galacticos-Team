@@ -9,4 +9,3 @@ void drawPauseScreen(sf::RenderWindow& window, int pauseSelection);
 void drawCountdown(sf::RenderWindow& window, int count);
 void drawMainMenu(sf::RenderWindow& window, int selectedItem);
 void drawRoundNumber(sf::RenderWindow& window, int round);
-void drawRoundWinner(sf::RenderWindow& window, int winnerIndex);

@@ -72,21 +72,6 @@ void drawHealthBars(sf::RenderWindow& window, Player players[], int p1Wins, int 
     }
 }
 
-void drawRoundWinner(sf::RenderWindow& window, int winnerIndex) {
-    sf::RectangleShape overlay({1600.f, 900.f});
-    overlay.setFillColor(sf::Color(0, 0, 0, 120));
-    window.draw(overlay);
-    loadAssets();
-    if (!g_fontLoaded) return;
-    std::string msg = (winnerIndex == 0) ? "PLAYER 1 WINS ROUND!" : "PLAYER 2 WINS ROUND!";
-    sf::Text winText(g_font, msg, 70);
-    winText.setFillColor(sf::Color::White);
-    winText.setStyle(sf::Text::Bold);
-    winText.setOrigin({winText.getLocalBounds().size.x / 2.f, 0});
-    winText.setPosition({800.f, 380.f});
-    window.draw(winText);
-}
-
 void drawWinScreen(sf::RenderWindow& window, int winnerIndex, int p1Wins, int p2Wins) {
     sf::RectangleShape overlay({1600.f, 900.f});
     overlay.setFillColor(sf::Color(0, 0, 0, 220));
@@ -135,16 +120,6 @@ void drawMainMenu(sf::RenderWindow& window, int selectedItem) {
         window.draw(bg);
     }
 
-    /*static sf::Texture logoTexture;
-    static bool logoLoaded = logoTexture.loadFromFile("assets/logo.png");
-    if (logoLoaded) {
-        sf::Sprite logo(logoTexture);
-        auto size = logoTexture.getSize();
-        logo.setOrigin({size.x / 2.f, size.y / 2.f});
-        logo.setPosition({800.f, 350.f});
-        logo.setScale({700.f/size.x, 700.f/size.x});
-        window.draw(logo);
-    } */
     sf::Text t1(g_font, "PLAY", 50); t1.setFillColor(selectedItem == 0 ? sf::Color::Yellow : sf::Color::White);
     t1.setOrigin({t1.getLocalBounds().size.x/2.f, 0}); t1.setPosition({800.f, 650.f}); window.draw(t1);
     sf::Text t2(g_font, "QUIT", 50); t2.setFillColor(selectedItem == 1 ? sf::Color::Yellow : sf::Color::White);
@@ -172,11 +147,8 @@ void drawPauseScreen(sf::RenderWindow& window, int pauseSelection) {
     m.setOrigin({m.getLocalBounds().size.x/2.f, 0}); m.setPosition({800.f, 550.f}); window.draw(m);
 }
 
-
 void drawCountdown(sf::RenderWindow& window, int count) {
-
     loadAssets();
-
     static bool countsoundLoaded = false;
     static sf::SoundBuffer countdownBuffer;
     static sf::Sound countdownSound(countdownBuffer);
@@ -188,8 +160,7 @@ void drawCountdown(sf::RenderWindow& window, int count) {
         }
     }
 
-     static bool played = false;
-
+    static bool played = false;
     if (count == 3 && !played) { 
         countdownSound.stop();   
         countdownSound.play();
