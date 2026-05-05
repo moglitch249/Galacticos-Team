@@ -23,3 +23,5 @@ compile_commands.json
 
 # Windows binaries and build artifacts
 *.a
+# Personal Makefile
+Makefile

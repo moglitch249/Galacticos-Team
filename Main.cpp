@@ -28,7 +28,6 @@ int main() {
         playerInit(players[i], i, currentLevel);
     }
 
-     // playerInit(players[0], 0, currentLevel); playerInit(players[1], 1, currentLevel);
     sf::Clock clock;
 
     while (window.isOpen()) {
@@ -71,12 +70,8 @@ int main() {
             playerReadInputForIndex(players[0], 0); playerReadInputForIndex(players[1], 1);
             playerUpdate(players[0], dt); playerUpdate(players[1], dt);
             physicsUpdate(players[0], dt, levelId); physicsUpdate(players[1], dt,levelId);
-            for (int i = 0; i < currentLevel.platformCount; i++)
-            {
+            for (int i = 0; i < currentLevel.platformCount; i++) {
                 resolvePlatformCollision(players[0], currentLevel.platforms[i]);
-            }
-            for (int i = 0; i < currentLevel.platformCount; i++)
-            {
                 resolvePlatformCollision(players[1], currentLevel.platforms[i]);
             }
             
